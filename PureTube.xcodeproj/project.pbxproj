@@ -1,0 +1,396 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		19294BBA316A2E1D7D099878 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92B97607BF8F1F01729CC4A1 /* Assets.xcassets */; };
+		1D4EEC5DF69D9EAB43FA03A5 /* WebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD990654AA4550275ED95EC9 /* WebViewModel.swift */; };
+		2D9BB65071B4B3CD3351108A /* cosmetic_rules.css in Resources */ = {isa = PBXBuildFile; fileRef = 65E8D071BA47D118A97D773B /* cosmetic_rules.css */; };
+		65B3C08392128ACB0AA2A32F /* YouTubeWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EFA2FBAC3C99A4EEB71010 /* YouTubeWebView.swift */; };
+		6923E61FE6CA788C6B58354D /* block_rules.json in Resources */ = {isa = PBXBuildFile; fileRef = F2CFC70DA8FD5387F2E6BC46 /* block_rules.json */; };
+		76E9EA3EAB742500CD0F233B /* AdBlockEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024F818793FC458DE02666B5 /* AdBlockEngine.swift */; };
+		80E91217B3FB4AD17CC6E08B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985230D6DCE7F314FD4BCCEA /* SettingsView.swift */; };
+		A3AD6C7B0E5571C15E609274 /* TopToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F074FAE90C73AD3E020FEC /* TopToolbarView.swift */; };
+		B365EEC1190B6FA3F0467BD1 /* adblock_core.js in Resources */ = {isa = PBXBuildFile; fileRef = 68E73D920E16C82AF342F525 /* adblock_core.js */; };
+		C1631F63A735540048EDE67A /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C9E1737A31BBB668228F16 /* AudioSessionManager.swift */; };
+		E82A00934F67FA23FFBA2B52 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EDC802E610DAEBC3C4B546 /* ContentView.swift */; };
+		EEE8EBFCC5540C5EAEC3315C /* background_playback.js in Resources */ = {isa = PBXBuildFile; fileRef = C311747C70B283D7D9C991B2 /* background_playback.js */; };
+		F01F04C6E59ED5E0D8D816AD /* PureTubeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C5B3DF7E20389790D973F /* PureTubeApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		024F818793FC458DE02666B5 /* AdBlockEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockEngine.swift; sourceTree = "<group>"; };
+		65E8D071BA47D118A97D773B /* cosmetic_rules.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = cosmetic_rules.css; sourceTree = "<group>"; };
+		68E73D920E16C82AF342F525 /* adblock_core.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = adblock_core.js; sourceTree = "<group>"; };
+		87F074FAE90C73AD3E020FEC /* TopToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopToolbarView.swift; sourceTree = "<group>"; };
+		92B97607BF8F1F01729CC4A1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		93EFA2FBAC3C99A4EEB71010 /* YouTubeWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeWebView.swift; sourceTree = "<group>"; };
+		985230D6DCE7F314FD4BCCEA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A7C9E1737A31BBB668228F16 /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
+		AAB5325D6885D64CEA2CA6AE /* PureTube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PureTube.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1EDC802E610DAEBC3C4B546 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C311747C70B283D7D9C991B2 /* background_playback.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background_playback.js; sourceTree = "<group>"; };
+		CF2C5B3DF7E20389790D973F /* PureTubeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PureTubeApp.swift; sourceTree = "<group>"; };
+		DD990654AA4550275ED95EC9 /* WebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewModel.swift; sourceTree = "<group>"; };
+		F2CFC70DA8FD5387F2E6BC46 /* block_rules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = block_rules.json; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		084495DE02C0616F94AC2E3D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AAB5325D6885D64CEA2CA6AE /* PureTube.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		12022BBEE897C830237BF635 = {
+			isa = PBXGroup;
+			children = (
+				5EA013CE31D3F90BC70E71EC /* Sources */,
+				084495DE02C0616F94AC2E3D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		222705D2EF3472C431030AD0 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				68E73D920E16C82AF342F525 /* adblock_core.js */,
+				C311747C70B283D7D9C991B2 /* background_playback.js */,
+				65E8D071BA47D118A97D773B /* cosmetic_rules.css */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
+		389A84E6E5395B3CA14811F7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				985230D6DCE7F314FD4BCCEA /* SettingsView.swift */,
+				87F074FAE90C73AD3E020FEC /* TopToolbarView.swift */,
+				93EFA2FBAC3C99A4EEB71010 /* YouTubeWebView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5EA013CE31D3F90BC70E71EC /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				B1EDC802E610DAEBC3C4B546 /* ContentView.swift */,
+				CF2C5B3DF7E20389790D973F /* PureTubeApp.swift */,
+				6A98F7BD22D7DF384B37799D /* Managers */,
+				F424F77319BACA4807EC25D3 /* Resources */,
+				389A84E6E5395B3CA14811F7 /* Views */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		6A98F7BD22D7DF384B37799D /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				024F818793FC458DE02666B5 /* AdBlockEngine.swift */,
+				A7C9E1737A31BBB668228F16 /* AudioSessionManager.swift */,
+				DD990654AA4550275ED95EC9 /* WebViewModel.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		C20144788100FBE8D4440B48 /* Rules */ = {
+			isa = PBXGroup;
+			children = (
+				F2CFC70DA8FD5387F2E6BC46 /* block_rules.json */,
+			);
+			path = Rules;
+			sourceTree = "<group>";
+		};
+		F424F77319BACA4807EC25D3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				92B97607BF8F1F01729CC4A1 /* Assets.xcassets */,
+				C20144788100FBE8D4440B48 /* Rules */,
+				222705D2EF3472C431030AD0 /* Scripts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C5F4AAA62A7CAFCC862D98D5 /* PureTube */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B70AC76208038FD04263AC98 /* Build configuration list for PBXNativeTarget "PureTube" */;
+			buildPhases = (
+				6ECDE7E8D7294C2C709243F1 /* Sources */,
+				A5C04BCD8C853F1F29F3C0C9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PureTube;
+			packageProductDependencies = (
+			);
+			productName = PureTube;
+			productReference = AAB5325D6885D64CEA2CA6AE /* PureTube.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		18F49D0135730C3C612DCBEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					C5F4AAA62A7CAFCC862D98D5 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = B10D2CC3783DCCF2B0E6142B /* Build configuration list for PBXProject "PureTube" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 12022BBEE897C830237BF635;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 084495DE02C0616F94AC2E3D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C5F4AAA62A7CAFCC862D98D5 /* PureTube */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A5C04BCD8C853F1F29F3C0C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19294BBA316A2E1D7D099878 /* Assets.xcassets in Resources */,
+				B365EEC1190B6FA3F0467BD1 /* adblock_core.js in Resources */,
+				EEE8EBFCC5540C5EAEC3315C /* background_playback.js in Resources */,
+				6923E61FE6CA788C6B58354D /* block_rules.json in Resources */,
+				2D9BB65071B4B3CD3351108A /* cosmetic_rules.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6ECDE7E8D7294C2C709243F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76E9EA3EAB742500CD0F233B /* AdBlockEngine.swift in Sources */,
+				C1631F63A735540048EDE67A /* AudioSessionManager.swift in Sources */,
+				E82A00934F67FA23FFBA2B52 /* ContentView.swift in Sources */,
+				F01F04C6E59ED5E0D8D816AD /* PureTubeApp.swift in Sources */,
+				80E91217B3FB4AD17CC6E08B /* SettingsView.swift in Sources */,
+				A3AD6C7B0E5571C15E609274 /* TopToolbarView.swift in Sources */,
+				1D4EEC5DF69D9EAB43FA03A5 /* WebViewModel.swift in Sources */,
+				65B3C08392128ACB0AA2A32F /* YouTubeWebView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		478A41FB824FC899CA7BB2A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = GSVFXDWC9Q;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.haorong.PureTube;
+				PRODUCT_NAME = PureTube;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B9EFC27E00E19D9A032F8BC5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		E03A35D91770D584784A02F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F94D9FC6D6B74AC049C39215 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = GSVFXDWC9Q;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.haorong.PureTube;
+				PRODUCT_NAME = PureTube;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B10D2CC3783DCCF2B0E6142B /* Build configuration list for PBXProject "PureTube" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E03A35D91770D584784A02F7 /* Debug */,
+				B9EFC27E00E19D9A032F8BC5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B70AC76208038FD04263AC98 /* Build configuration list for PBXNativeTarget "PureTube" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F94D9FC6D6B74AC049C39215 /* Debug */,
+				478A41FB824FC899CA7BB2A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 18F49D0135730C3C612DCBEA /* Project object */;
+}

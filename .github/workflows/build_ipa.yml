@@ -1,0 +1,46 @@
+name: Build PureTube IPA
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build unsigned IPA for Sideloading (SideStore / TrollStore)
+        run: |
+          xcodebuild -project PureTube.xcodeproj \
+                     -scheme PureTube \
+                     -configuration Release \
+                     -destination 'generic/platform=iOS' \
+                     -sdk iphoneos \
+                     CODE_SIGN_IDENTITY="" \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGNING_ALLOWED=NO \
+                     clean build
+
+          APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "PureTube.app" -type d | grep Release-iphoneos | head -n 1)
+          mkdir -p build_output/Payload
+          cp -r "$APP_PATH" build_output/Payload/
+          cd build_output
+          zip -qr9 ../PureTube.ipa Payload
+          cd ..
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PureTube.ipa
+          path: PureTube.ipa

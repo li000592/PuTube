@@ -1,0 +1,96 @@
+/* PureTube Cosmetic Ad Filtering Styles */
+
+/* 1. Eliminate Parent Grid Containers for Blocked Ads (Removes blank empty grid slots) */
+ytd-rich-item-renderer:has(ytd-ad-slot-renderer),
+ytd-rich-item-renderer:has(ytd-in-feed-ad-layout-renderer),
+ytd-rich-item-renderer:has(ad-slot-renderer),
+ytd-rich-item-renderer:has(ytd-display-ad-renderer),
+ytd-rich-item-renderer:has(ytd-promoted-video-renderer),
+ytd-rich-item-renderer:has(ytd-promoted-sparkles-web-renderer),
+ytd-rich-item-renderer:has(#ad),
+ytd-rich-item-renderer:has(.ytd-ad-slot-renderer),
+ytd-rich-item-renderer:has([aria-label*="sponsored" i]),
+ytd-rich-item-renderer:has([aria-label*="sponsorisé" i]),
+ytd-rich-item-renderer:has([aria-label*="广告" i]),
+ytd-rich-item-renderer:has([aria-label*="贊助" i]),
+ytd-rich-section-renderer:has(ytd-ad-slot-renderer),
+ytd-rich-section-renderer:has(ytd-statement-banner-renderer),
+ytd-rich-section-renderer:has(ytd-brand-video-singleton-renderer),
+ytd-rich-section-renderer:has(#brand-banner),
+ytd-video-renderer:has(ytd-ad-slot-renderer),
+ytd-compact-video-renderer:has(ytd-ad-slot-renderer),
+ytd-rich-item-renderer[is-ad],
+ytd-ad-slot-renderer,
+#masthead-ad {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 2. Seamless Grid Reflow (Prevents empty gap when items in a row are removed) */
+ytd-rich-grid-row,
+#contents.ytd-rich-grid-row {
+  display: contents !important;
+}
+
+/* 3. YouTube Desktop & Tablet Ad Elements */
+ytd-promoted-sparkles-web-renderer,
+ytd-promoted-video-renderer,
+ytd-display-ad-renderer,
+ytd-statement-banner-renderer,
+ytd-banner-promo-renderer,
+ytd-in-feed-ad-layout-renderer,
+#panels:has(ytd-ads-engagement-panel-content-renderer),
+ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-ads"],
+ytd-merch-shelf-renderer,
+
+/* YouTube Mobile Web Ad Elements */
+ytm-promoted-sparkles-web-renderer,
+ytm-companion-ad-renderer,
+ytm-promoted-video-renderer,
+ytm-ad-slot-renderer,
+ad-slot-renderer,
+
+/* Player In-Stream Overlays & Badges */
+.ytp-ad-overlay-container,
+.ytp-ad-message-container,
+.ytp-ad-progress,
+.ytp-ad-progress-list,
+.ytp-ad-player-overlay,
+.ytp-ad-player-overlay-flyout-cta,
+.ytp-ad-action-interstitial,
+
+/* Premium Nag Banners & App Installation Prompts */
+yt-mealbar-promo-renderer,
+.fullscreen-and-theater-app-promo,
+ytd-primetime-promo-renderer,
+#offer-module,
+ytd-clarification-renderer,
+tp-yt-paper-dialog:has(#feedback),
+.ytd-popup-container:has(yt-mealbar-promo-renderer),
+ytd-action-companion-ad-renderer,
+ytd-compact-promoted-video-renderer,
+.upsell-dialog-renderer,
+ytd-app-promo-renderer,
+ytm-app-promo,
+ytm-open-app-button,
+.smart-app-banner,
+.open-in-app-container,
+a[href^="vnd.youtube"],
+a[href^="youtube:"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Ensure smooth native full screen rendering */
+video {
+  max-width: 100% !important;
+}

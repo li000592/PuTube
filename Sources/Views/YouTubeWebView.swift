@@ -121,38 +121,27 @@ struct YouTubeWebView: UIViewRepresentable {
             }
             
             let scheme = url.scheme?.lowercased() ?? ""
-            let host = url.host?.lowercased() ?? ""
-            let currentHost = webView.url?.host?.lowercased() ?? ""
             let isMainFrame = navigationAction.targetFrame?.isMainFrame ?? false
             
-            // 1. If this navigation was initiated programmatically to bypass iOS Universal Links:
-            if let bypass = internalBypassURL {
-                if bypass == url || bypass.host == url.host {
-                    internalBypassURL = nil
-                    decisionHandler(.allow)
-                    return
-                }
-            }
+            // Policy that instructs WebKit to load internally and NEVER hand off to external apps via Universal Links
+            let noAppLinkPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
             
-            // 2. Intercept and block external app schemes (vnd.youtube, youtube, intent, googlechrome)
+            // 1. Intercept and block external app schemes (vnd.youtube, youtube, intent, googlechrome)
             if scheme == "vnd.youtube" || scheme == "youtube" || scheme == "intent" || scheme == "googlechrome" || scheme == "googlechromes" {
                 print("[PureTube Navigation] Intercepted external app scheme redirect: \(url.absoluteString)")
                 let target = convertToHttps(url: url) ?? URL(string: "https://www.youtube.com")!
-                internalBypassURL = target
                 decisionHandler(.cancel)
                 webView.load(URLRequest(url: target))
                 return
             }
             
-            // 3. Subframes / Iframes: ALWAYS allow without interfering
-            // Google Accounts uses hidden background iframes (e.g. accounts.youtube.com/accounts/CheckConnection)
-            // Intercepting or loading iframe URLs in the main webView causes white screen!
+            // 2. Subframes / Iframes: ALWAYS allow without triggering app link checks
             if !isMainFrame && (scheme == "http" || scheme == "https") {
-                decisionHandler(.allow)
+                decisionHandler(noAppLinkPolicy)
                 return
             }
             
-            // 4. Handle target="_blank" links (popup or new tab)
+            // 3. Handle target="_blank" links (popup or new tab) -> load directly in same webView
             if navigationAction.targetFrame == nil {
                 if scheme == "http" || scheme == "https" {
                     let urlStr = url.absoluteString
@@ -162,29 +151,13 @@ struct YouTubeWebView: UIViewRepresentable {
                         return
                     }
                 }
-                decisionHandler(.allow)
+                decisionHandler(.cancel)
                 return
             }
             
-            // 5. Handle HTTP/HTTPS navigations in Main Frame
+            // 4. Main Frame HTTP/HTTPS: Use AllowWithoutTryingAppLink so iOS NEVER jumps to YouTube app
             if scheme == "http" || scheme == "https" {
-                // Prevent iOS Universal Links from handing off to the installed YouTube App:
-                // When transitioning from accounts.google.com back to youtube.com after login,
-                // iOS tries to launch the native app.
-                // We bypass this by cancelling the OS handoff and loading programmatically.
-                let isYouTubeDomain = host.contains("youtube.com") || host.contains("youtu.be")
-                let isFromNonYouTube = !currentHost.isEmpty && !currentHost.contains("youtube.com") && !currentHost.contains("youtu.be")
-                let isAuthEndpoint = host.contains("accounts.google.com") || host.contains("accounts.youtube.com")
-                
-                if isYouTubeDomain && isFromNonYouTube && isMainFrame && !isAuthEndpoint {
-                    print("[PureTube Navigation] Preventing Universal Link handoff from \(currentHost) to \(host). Loading internally.")
-                    internalBypassURL = url
-                    decisionHandler(.cancel)
-                    webView.load(navigationAction.request)
-                    return
-                }
-                
-                decisionHandler(.allow)
+                decisionHandler(noAppLinkPolicy)
                 return
             }
             

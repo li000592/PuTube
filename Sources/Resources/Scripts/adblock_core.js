@@ -36,19 +36,19 @@
     let modified = false;
 
     try {
-      if (response.adPlacements && response.adPlacements.length > 0) {
-        response.adPlacements = [];
+      if ('adPlacements' in response) {
+        delete response.adPlacements;
         modified = true;
       }
-      if (response.playerAds && response.playerAds.length > 0) {
-        response.playerAds = [];
+      if ('playerAds' in response) {
+        delete response.playerAds;
         modified = true;
       }
-      if (response.adSlots && response.adSlots.length > 0) {
-        response.adSlots = [];
+      if ('adSlots' in response) {
+        delete response.adSlots;
         modified = true;
       }
-      if (response.adPlacementConfig) {
+      if ('adPlacementConfig' in response) {
         delete response.adPlacementConfig;
         modified = true;
       }
@@ -59,6 +59,7 @@
         delete response.playbackTracking.videostatsPlaybackUrl;
         delete response.playbackTracking.videostatsDelayplayUrl;
         delete response.playbackTracking.videostatsWatchtimeUrl;
+        modified = true;
       }
     } catch (e) {
       console.warn('[PureTube] Error in sanitizePlayerResponse:', e);
@@ -69,6 +70,20 @@
     }
     return response;
   }
+
+  // Hook JSON.parse to intercept all YouTube player JSON payloads
+  const origJSONParse = JSON.parse;
+  JSON.parse = function(...args) {
+    const res = origJSONParse.apply(this, args);
+    if (res && typeof res === 'object') {
+      try {
+        if (res.adPlacements || res.playerAds || res.adSlots || res.adPlacementConfig) {
+          sanitizePlayerResponse(res);
+        }
+      } catch (e) {}
+    }
+    return res;
+  };
 
   // Hook window.ytInitialPlayerResponse
   let internalPlayerResponse = window.ytInitialPlayerResponse;
@@ -102,12 +117,29 @@
   // Hook XMLHttpRequest
   const origOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function(method, url) {
-    if (isAdUrl(url)) {
+    this._pureTubeUrl = typeof url === 'string' ? url : (url && url.toString ? url.toString() : '');
+    if (isAdUrl(this._pureTubeUrl)) {
       this.abort();
-      notifyNative('ad_request_blocked', url);
+      notifyNative('ad_request_blocked', this._pureTubeUrl);
       return;
     }
     return origOpen.apply(this, arguments);
+  };
+
+  const origSend = XMLHttpRequest.prototype.send;
+  XMLHttpRequest.prototype.send = function(...args) {
+    this.addEventListener('readystatechange', function() {
+      if (this.readyState === 4 && this._pureTubeUrl && this._pureTubeUrl.includes('/youtubei/v1/player')) {
+        try {
+          const data = origJSONParse.call(JSON, this.responseText);
+          const sanitized = sanitizePlayerResponse(data);
+          const newText = JSON.stringify(sanitized);
+          Object.defineProperty(this, 'responseText', { value: newText, configurable: true });
+          Object.defineProperty(this, 'response', { value: newText, configurable: true });
+        } catch (e) {}
+      }
+    });
+    return origSend.apply(this, args);
   };
 
   // Hook window.fetch
@@ -149,53 +181,78 @@
 
   function fastForwardAndSkip() {
     const now = Date.now();
-    // In YouTube's player, an ad is ONLY actively showing when the player element has 'ad-showing' or 'ad-interrupting'
-    const player = document.querySelector('#movie_player, .html5-video-player');
-    const isAdActive = player && (
-      player.classList.contains('ad-showing') ||
-      player.classList.contains('ad-interrupting')
-    );
+    const moviePlayer = document.getElementById('movie_player') || document.querySelector('.html5-video-player');
     const video = document.querySelector('video');
 
-    if (isAdActive && video) {
-      try {
-        video.muted = true;
-        if (isFinite(video.duration) && video.duration > 0) {
-          video.currentTime = video.duration;
-        }
-        if (now - lastSkipTime > 1000) {
-          lastSkipTime = now;
-          notifyNative('ad_skipped', 'Fast-forwarded active ad stream');
-        }
-      } catch (e) {}
-    }
+    // 1. Direct Skip Button Click (click instantly regardless of state!)
+    const skipSelectors = [
+      '.ytp-ad-skip-button',
+      '.ytp-ad-skip-button-modern',
+      '.ytp-skip-ad-button',
+      '.ytp-ad-skip-button-text',
+      '.videoAdUiSkipButton',
+      'button.ytp-ad-skip-button-modern',
+      '.ytp-ad-skip-button-slot button',
+      '.ytp-ad-skip-button-container button',
+      '[id^="skip-button:"]',
+      '[id^="skip-button"]',
+      'button[aria-label*="skip" i]',
+      'button[aria-label*="跳过" i]',
+      'button[aria-label*="略過" i]'
+    ];
 
-    // Only click skip buttons when an ad is actually active
-    if (isAdActive) {
-      const skipSelectors = [
-        '.ytp-ad-skip-button',
-        '.ytp-ad-skip-button-modern',
-        '.ytp-skip-ad-button',
-        '.ytp-ad-skip-button-text',
-        '.videoAdUiSkipButton',
-        'button.ytp-ad-skip-button-modern'
-      ];
-
-      for (const selector of skipSelectors) {
-        const btn = document.querySelector(selector);
-        if (btn) {
-          try {
-            btn.click();
-            if (now - lastSkipTime > 1000) {
-              lastSkipTime = now;
-              notifyNative('ad_skipped', 'Clicked skip button');
-            }
-          } catch (e) {}
-        }
+    for (const selector of skipSelectors) {
+      const btn = document.querySelector(selector);
+      if (btn) {
+        try {
+          btn.click();
+          if (now - lastSkipTime > 800) {
+            lastSkipTime = now;
+            notifyNative('ad_skipped', 'Clicked skip button');
+          }
+        } catch (e) {}
       }
     }
 
-    // Auto-dismiss "Video paused. Continue watching?"
+    // 2. Comprehensive Ad Detection (Multiple Signals)
+    const isAdActive = (
+      (moviePlayer && (
+        moviePlayer.classList.contains('ad-showing') ||
+        moviePlayer.classList.contains('ad-interrupting') ||
+        (typeof moviePlayer.isAd === 'function' && moviePlayer.isAd()) ||
+        (typeof moviePlayer.getAdState === 'function' && moviePlayer.getAdState() > 0)
+      )) ||
+      document.querySelector('.ytp-ad-player-overlay') !== null ||
+      document.querySelector('.ytp-ad-text') !== null ||
+      document.querySelector('.ytp-ad-badge') !== null ||
+      document.querySelector('[class*="badge-sponsored"]') !== null ||
+      document.querySelector('.video-ads.ytp-ad-module')?.children.length > 0
+    );
+
+    // 3. Fast-forward & mute video if an ad is currently playing
+    if (isAdActive) {
+      if (moviePlayer && typeof moviePlayer.skipAd === 'function') {
+        try { moviePlayer.skipAd(); } catch (e) {}
+      }
+
+      if (video) {
+        try {
+          video.muted = true;
+          video.playbackRate = 16.0;
+          if (isFinite(video.duration) && video.duration > 0) {
+            video.currentTime = video.duration;
+          } else {
+            video.currentTime = 999999;
+          }
+          if (now - lastSkipTime > 800) {
+            lastSkipTime = now;
+            notifyNative('ad_skipped', 'Fast-forwarded active ad stream');
+          }
+        } catch (e) {}
+      }
+    }
+
+    // 4. Auto-dismiss "Video paused. Continue watching?"
     const dialogConfirm = document.querySelector(
       'yt-confirm-dialog-renderer #confirm-button, #confirm-button button'
     );
@@ -281,11 +338,16 @@
     });
   }
 
-  // Fast interval check for rapid skipping and grid cleanup
+  // High-frequency interval check (100ms) for instant skipping
   setInterval(() => {
     fastForwardAndSkip();
     removeEmptyAdGridSlots();
-  }, 250);
+  }, 100);
+
+  // Hook playback events directly on the document for immediate reaction
+  document.addEventListener('timeupdate', fastForwardAndSkip, true);
+  document.addEventListener('play', fastForwardAndSkip, true);
+  document.addEventListener('playing', fastForwardAndSkip, true);
 
   // MutationObserver for instant trigger on DOM change
   const observer = new MutationObserver(() => {

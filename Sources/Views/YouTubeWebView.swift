@@ -123,6 +123,7 @@ struct YouTubeWebView: UIViewRepresentable {
             let scheme = url.scheme?.lowercased() ?? ""
             let host = url.host?.lowercased() ?? ""
             let currentHost = webView.url?.host?.lowercased() ?? ""
+            let isMainFrame = navigationAction.targetFrame?.isMainFrame ?? false
             
             // 1. If this navigation was initiated programmatically to bypass iOS Universal Links:
             if let bypass = internalBypassURL {
@@ -143,23 +144,39 @@ struct YouTubeWebView: UIViewRepresentable {
                 return
             }
             
-            // 3. Handle HTTP/HTTPS navigations
-            if scheme == "http" || scheme == "https" {
-                // If link target is _blank (common in Google OAuth or new tabs), load in current view
-                if navigationAction.targetFrame == nil {
-                    decisionHandler(.cancel)
-                    webView.load(navigationAction.request)
-                    return
+            // 3. Subframes / Iframes: ALWAYS allow without interfering
+            // Google Accounts uses hidden background iframes (e.g. accounts.youtube.com/accounts/CheckConnection)
+            // Intercepting or loading iframe URLs in the main webView causes white screen!
+            if !isMainFrame && (scheme == "http" || scheme == "https") {
+                decisionHandler(.allow)
+                return
+            }
+            
+            // 4. Handle target="_blank" links (popup or new tab)
+            if navigationAction.targetFrame == nil {
+                if scheme == "http" || scheme == "https" {
+                    let urlStr = url.absoluteString
+                    if !urlStr.isEmpty && urlStr != "about:blank" {
+                        decisionHandler(.cancel)
+                        webView.load(navigationAction.request)
+                        return
+                    }
                 }
-                
+                decisionHandler(.allow)
+                return
+            }
+            
+            // 5. Handle HTTP/HTTPS navigations in Main Frame
+            if scheme == "http" || scheme == "https" {
                 // Prevent iOS Universal Links from handing off to the installed YouTube App:
                 // When transitioning from accounts.google.com back to youtube.com after login,
-                // or clicking a link from an external domain to youtube, iOS tries to launch the native app.
-                // By cancelling and reloading programmatically via webView.load(), we bypass Universal Links completely.
+                // iOS tries to launch the native app.
+                // We bypass this by cancelling the OS handoff and loading programmatically.
                 let isYouTubeDomain = host.contains("youtube.com") || host.contains("youtu.be")
                 let isFromNonYouTube = !currentHost.isEmpty && !currentHost.contains("youtube.com") && !currentHost.contains("youtu.be")
+                let isAuthEndpoint = host.contains("accounts.google.com") || host.contains("accounts.youtube.com")
                 
-                if isYouTubeDomain && isFromNonYouTube {
+                if isYouTubeDomain && isFromNonYouTube && isMainFrame && !isAuthEndpoint {
                     print("[PureTube Navigation] Preventing Universal Link handoff from \(currentHost) to \(host). Loading internally.")
                     internalBypassURL = url
                     decisionHandler(.cancel)
@@ -173,6 +190,23 @@ struct YouTubeWebView: UIViewRepresentable {
             
             // Block all other unknown schemes (like itms-apps, etc.) to keep user sandboxed
             decisionHandler(.cancel)
+        }
+        
+        func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+            let nsError = error as NSError
+            if nsError.code == NSURLErrorCancelled { return }
+            print("[PureTube WebKit] Navigation failed: \(error.localizedDescription)")
+        }
+        
+        func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+            let nsError = error as NSError
+            if nsError.code == NSURLErrorCancelled { return }
+            print("[PureTube WebKit] Provisional navigation failed: \(error.localizedDescription)")
+        }
+        
+        func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+            print("[PureTube WebKit] WebContent process terminated, reloading...")
+            webView.reload()
         }
         
         private func convertToHttps(url: URL) -> URL? {
@@ -225,8 +259,11 @@ struct YouTubeWebView: UIViewRepresentable {
         
         // MARK: - WKUIDelegate (Handle target="_blank" links in same view)
         func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-            if navigationAction.targetFrame == nil {
-                webView.load(navigationAction.request)
+            if navigationAction.targetFrame == nil, let url = navigationAction.request.url {
+                let urlStr = url.absoluteString
+                if !urlStr.isEmpty && urlStr != "about:blank" {
+                    webView.load(navigationAction.request)
+                }
             }
             return nil
         }

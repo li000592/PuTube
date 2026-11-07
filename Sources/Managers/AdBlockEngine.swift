@@ -70,6 +70,8 @@ final class AdBlockEngine {
             
             let cssInjector = """
             (function() {
+                const host = window.location.hostname || '';
+                if (!host.includes('youtube.com') && !host.includes('youtu.be')) return;
                 function injectCSS() {
                     if (document.getElementById('puretube-cosmetic-rules')) return;
                     const style = document.createElement('style');

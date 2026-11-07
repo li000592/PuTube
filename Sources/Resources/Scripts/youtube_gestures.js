@@ -9,6 +9,8 @@
  */
 (function() {
   'use strict';
+  const host = window.location.hostname || '';
+  if (!host.includes('youtube.com') && !host.includes('youtu.be')) return;
   if (window.__pureTubeGesturesLoaded) return;
   window.__pureTubeGesturesLoaded = true;
 
